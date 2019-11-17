@@ -8,6 +8,8 @@ Usage:
 
 ```
 dotnet HexAndReplace.dll <file> <find hex> <replace hex>
+
+Example: dotnet HexAndReplace.dll mybinaryfile.bin 0xFFEEDDCC 0xAAEEDDCC
 ```
 
 Enjoy!
