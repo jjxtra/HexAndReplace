@@ -32,12 +32,12 @@ namespace HexAndReplace
             byte[] bytes = File.ReadAllBytes(args[0]);
             foreach (int index in PatternAt(bytes, find))
             {
-                Console.WriteLine("Pattern found at offset {0}", index);
                 for (int i = index, replaceIndex = 0; i < bytes.Length && replaceIndex < replace.Length; i++, replaceIndex++)
                 {
                     bytes[i] = replace[replaceIndex];
                 }
                 File.WriteAllBytes(args[0], bytes);
+                Console.WriteLine("Pattern found at offset {0} and replaced.", index);
                 break;
             }
             return 0;
