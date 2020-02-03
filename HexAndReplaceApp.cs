@@ -18,7 +18,7 @@ namespace HexAndReplace
         /// <param name="args">Args</param>
         public static int Main(string[] args)
         {
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
                 Console.WriteLine("Replace first instance of one hex sequence with another. Usage: <File Name> <Find Hex> <Replacement Hex>.");
                 return -1;
@@ -38,9 +38,10 @@ namespace HexAndReplace
                 }
                 File.WriteAllBytes(args[0], bytes);
                 Console.WriteLine("Pattern found at offset {0} and replaced.", index);
-                break;
+                return 0;
             }
-            return 0;
+            Console.WriteLine("Pattern not found");
+            return -1;
         }
 
         private static IEnumerable<int> PatternAt(byte[] source, byte[] pattern)
