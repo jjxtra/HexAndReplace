@@ -77,4 +77,4 @@ namespace HexAndReplace
 // Examples for Unity dark mode:
 // "C:\Program Files\Unity\Hub\Editor\2017.4.36f1\Editor\Unity.exe" "75 08 33 C0 48 83 C4 20 5B C3 8B 03 48 83 C4 20 5B C3" "74 08 33 C0 48 83 C4 20 5B C3 8B 03 48 83 C4 20 5B C3"
 // "C:\Program Files\Unity\Hub\Editor\2018.4.6f1\Editor\Unity.exe" "74 04 33 C0 EB 02 8B 03 48 8B 4C" "75 04 33 C0 EB 02 8B 03 48 8B 4C"
-// "C:\Program Files\Unity\Hub\Editor\2019.3.4f1\Editor\Unity.exe" "75 15 33 C0 EB 13 90" "74 15 33 C0 EB 13 90" 
+// "C:\Program Files\Unity\Hub\Editor\2019.3.5f1\Editor\Unity.exe" "75 15 33 C0 EB 13 90" "74 15 33 C0 EB 13 90" 
