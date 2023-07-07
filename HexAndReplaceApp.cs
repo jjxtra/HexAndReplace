@@ -37,12 +37,12 @@ namespace HexAndReplace
                 {
                     bytes[i] = replace[replaceIndex];
                 }
-                File.WriteAllBytes(args[0], bytes);
                 Console.WriteLine("Pattern found at offset {0} and replaced.", index);
                 matchFound = true;
             }
             if (matchFound)
             {
+                File.WriteAllBytes(args[0], bytes);
                 return 0;
             }
             else
