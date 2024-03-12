@@ -56,10 +56,11 @@ namespace HexAndReplace
         {
             for (int i = 0; i < source.Length; i++)
             {
-                if (source.Skip(i).Take(pattern.Length).SequenceEqual(pattern))
+				for (int j = 0; j < pattern.Length; j++)
                 {
-                    yield return i;
-                }
+					if (source[i + j] != pattern[j]) break;
+                    else if (j == pattern.Length - 1) yield return i;
+				}
             }
         }
 
