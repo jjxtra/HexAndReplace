@@ -13,7 +13,7 @@ dotnet publish $projectPath `
 Remove-Item -Path "./bin/release/net8.0/publish/win-x64/*.pdb"
 
 # zip the output exe with max compression
-Compress-Archive -Path "./bin/release/net8.0/publish/win-x64/HexAndReplace.exe" -DestinationPath "./bin/release/net8.0/publish/win-x64/HexAndReplace.zip" -CompressionLevel Optimal -Force
+Compress-Archive -Path "./bin/release/net8.0/publish/win-x64/HexAndReplace.exe" -DestinationPath "./bin/release/net8.0/publish/win-x64/HexAndReplace_Windows_x64.zip" -CompressionLevel Optimal -Force
 
 # Publish for linux-x64 with single file compression
 dotnet publish $projectPath `
@@ -27,6 +27,6 @@ dotnet publish $projectPath `
 Remove-Item -Path "./bin/release/net8.0/publish/linux-x64/*.pdb"
 
 # zip the output exe with max compression
-Compress-Archive -Path "./bin/release/net8.0/publish/linux-x64/HexAndReplace" -DestinationPath "./bin/release/net8.0/publish/linux-x64/HexAndReplace.zip" -CompressionLevel Optimal -Force
+Compress-Archive -Path "./bin/release/net8.0/publish/linux-x64/HexAndReplace" -DestinationPath "./bin/release/net8.0/publish/linux-x64/HexAndReplace_Linux_x64.zip" -CompressionLevel Optimal -Force
 
 Write-Host "Publishing completed."
