@@ -80,7 +80,18 @@ namespace HexAndReplace
                 {
                     throw new ApplicationException("Test failed");
                 }
-                var finalSequence = new byte[] { 0x01, 0x02, 0x0A, 0x0B, 0x05, 0x06, 0x07, 0x08 };
+                pos = replacer.Replace([0x07, 0x08], [0x0C, 0x0D]);
+                if (pos != 6)
+                {
+                    throw new ApplicationException("Test failed");
+                }
+                pos = replacer.Replace([0x07, 0x08], [0x0C, 0x0D]);
+                if (pos != -1)
+                {
+                    throw new ApplicationException("Test failed");
+                }
+
+                var finalSequence = new byte[] { 0x01, 0x02, 0x0A, 0x0B, 0x05, 0x06, 0x0C, 0x0D };
                 if (!ms.ToArray().SequenceEqual(finalSequence))
                 {
                     throw new ApplicationException("Test failed");

@@ -39,6 +39,7 @@ public sealed class BinaryReplacer(Stream stream, int bufferSize = ushort.MaxVal
         long position = 0;
         byte[] buffer = new byte[bufferSize + find.Length - 1];
         int bytesRead;
+        stream.Position = 0;
         while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
         {
             for (int i = 0; i <= bytesRead - find.Length; i++)
