@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 
 namespace HexAndReplace;
 
@@ -35,6 +34,10 @@ public sealed class BinaryReplacer(Stream stream, int bufferSize = ushort.MaxVal
         if (find.Length != replace.Length)
         {
             throw new ArgumentException("Find and replace hex must be same length");
+        }
+        else if (find.Length > bufferSize)
+        {
+            throw new ArgumentException("Find size " + find.Length + " is too large for buffer size " + bufferSize);
         }
         long position = 0;
         long foundPosition = -1;
