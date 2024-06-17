@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace HexAndReplace
@@ -18,7 +18,12 @@ namespace HexAndReplace
         /// <param name="args">Args</param>
         public static int Main(string[] args)
         {
-            bool matchFound = false;
+            if (args.Length != 0 && args[0] == "test")
+            {
+                DoTests();
+                return -2;
+            }
+
             if (args.Length < 3)
             {
                 Console.WriteLine("Replace first instance of one hex sequence with another. Usage: <File Name> <Find Hex> <Replacement Hex>.");
@@ -26,41 +31,16 @@ namespace HexAndReplace
             }
             byte[] find = ConvertHexStringToByteArray(Regex.Replace(args[1], "0x|[ ,]", string.Empty).Normalize().Trim());
             byte[] replace = ConvertHexStringToByteArray(Regex.Replace(args[2], "0x|[ ,]", string.Empty).Normalize().Trim());
-            if (find.Length != replace.Length)
+            using BinaryReplacer replacer = new(File.Open(args[0], FileMode.Open));
+            long pos = replacer.Replace(find, replace);
+
+            if (pos >= 0)
             {
-                throw new ArgumentException("Find and replace hex must be same length");
-            }
-            byte[] bytes = File.ReadAllBytes(args[0]);
-            foreach (int index in PatternAt(bytes, find))
-            {
-                for (int i = index, replaceIndex = 0; i < bytes.Length && replaceIndex < replace.Length; i++, replaceIndex++)
-                {
-                    bytes[i] = replace[replaceIndex];
-                }
-                Console.WriteLine("Pattern found at offset {0} and replaced.", index);
-                matchFound = true;
-            }
-            if (matchFound)
-            {
-                File.WriteAllBytes(args[0], bytes);
+                Console.WriteLine($"Pattern found and replaced at position {pos}");
                 return 0;
             }
-            else
-            {
-                Console.WriteLine("Pattern not found");
-                return -1;
-            }
-        }
-
-        private static IEnumerable<int> PatternAt(byte[] source, byte[] pattern)
-        {
-            for (int i = 0; i < source.Length; i++)
-            {
-                if (source.Skip(i).Take(pattern.Length).SequenceEqual(pattern))
-                {
-                    yield return i;
-                }
-            }
+            Console.WriteLine("Pattern not found");
+            return -1;
         }
 
         private static byte[] ConvertHexStringToByteArray(string hexString)
@@ -78,6 +58,36 @@ namespace HexAndReplace
             }
 
             return data;
+        }
+
+        private static void DoTests()
+        {
+            static void DoTest(int bufferSize)
+            {
+                MemoryStream ms = new();
+                ms.Write([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
+                ms.Seek(0, SeekOrigin.Begin);
+                using BinaryReplacer replacer = new(ms, bufferSize);
+                long pos = replacer.Replace([0x03, 0x04], [0x0A, 0x0B]);
+                if (pos != 2)
+                {
+                    throw new ApplicationException("Test failed");
+                }
+                pos = replacer.Replace([0x03, 0x04], [0x0A, 0x0B]);
+                if (pos != -1)
+                {
+                    throw new ApplicationException("Test failed");
+                }
+                var finalSequence = new byte[] { 0x01, 0x02, 0x0A, 0x0B, 0x05, 0x06, 0x07, 0x08 };
+                if (!ms.ToArray().SequenceEqual(finalSequence))
+                {
+                    throw new ApplicationException("Test failed");
+                }
+            }
+            for (var i = 2; i <= 16; i++)
+            {
+                DoTest(i);
+            }
         }
     }
 }
