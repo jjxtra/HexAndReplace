@@ -43,11 +43,15 @@ public sealed class BinaryReplacer(Stream stream, int bufferSize = ushort.MaxVal
         {
             for (int i = 0; i <= bytesRead - find.Length; i++)
             {
-                if (buffer.Skip(i).Take(find.Length).SequenceEqual(find))
+                for (int j = 0; j < find.Length; j++)
                 {
-                    stream.Seek(position + i, SeekOrigin.Begin);
-                    stream.Write(replace, 0, replace.Length);
-                    return position + i;
+                    if (buffer[i + j] != find[j]) break;
+                    else if (j == find.Length - 1)
+                    {
+                        stream.Seek(position + i, SeekOrigin.Begin);
+                        stream.Write(replace, 0, replace.Length);
+                        return position + i;
+                    }
                 }
             }
             position += bytesRead - find.Length + 1;

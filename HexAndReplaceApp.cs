@@ -62,6 +62,8 @@ namespace HexAndReplace
 
         private static void DoTests()
         {
+            Console.WriteLine("Running tests...");
+
             static void DoTest(int bufferSize)
             {
                 MemoryStream ms = new();
@@ -88,6 +90,8 @@ namespace HexAndReplace
             {
                 DoTest(i);
             }
+
+            Console.WriteLine("All passed");
         }
     }
 }
