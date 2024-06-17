@@ -67,7 +67,7 @@ namespace HexAndReplace
             static void DoTest(int bufferSize)
             {
                 MemoryStream ms = new();
-                ms.Write([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08]);
+                ms.Write([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x03, 0x04, 0x07, 0x08]);
                 ms.Seek(0, SeekOrigin.Begin);
                 using BinaryReplacer replacer = new(ms, bufferSize);
                 long pos = replacer.Replace([0x03, 0x04], [0x0A, 0x0B]);
@@ -81,7 +81,7 @@ namespace HexAndReplace
                     throw new ApplicationException("Test failed");
                 }
                 pos = replacer.Replace([0x07, 0x08], [0x0C, 0x0D]);
-                if (pos != 6)
+                if (pos != 8)
                 {
                     throw new ApplicationException("Test failed");
                 }
@@ -91,7 +91,7 @@ namespace HexAndReplace
                     throw new ApplicationException("Test failed");
                 }
 
-                var finalSequence = new byte[] { 0x01, 0x02, 0x0A, 0x0B, 0x05, 0x06, 0x0C, 0x0D };
+                var finalSequence = new byte[] { 0x01, 0x02, 0x0A, 0x0B, 0x05, 0x06, 0x0A, 0x0B, 0x0C, 0x0D };
                 if (!ms.ToArray().SequenceEqual(finalSequence))
                 {
                     throw new ApplicationException("Test failed");

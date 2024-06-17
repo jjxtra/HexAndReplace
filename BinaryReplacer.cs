@@ -28,7 +28,7 @@ public sealed class BinaryReplacer(Stream stream, int bufferSize = ushort.MaxVal
     /// </summary>
     /// <param name="find">Find</param>
     /// <param name="replace">Replace</param>
-    /// <returns>Index of replace data, or -1 if find is not found</returns>
+    /// <returns>First index of replaced data, or -1 if find is not found</returns>
     /// <exception cref="ArgumentException">Find and replace are not the same length</exception>
     public long Replace(byte[] find, byte[] replace)
     {
@@ -37,6 +37,7 @@ public sealed class BinaryReplacer(Stream stream, int bufferSize = ushort.MaxVal
             throw new ArgumentException("Find and replace hex must be same length");
         }
         long position = 0;
+        long foundPosition = -1;
         byte[] buffer = new byte[bufferSize + find.Length - 1];
         int bytesRead;
         stream.Position = 0;
@@ -51,7 +52,11 @@ public sealed class BinaryReplacer(Stream stream, int bufferSize = ushort.MaxVal
                     {
                         stream.Seek(position + i, SeekOrigin.Begin);
                         stream.Write(replace, 0, replace.Length);
-                        return position + i;
+                        if (foundPosition == -1)
+                        {
+                            foundPosition = position + i;
+                        }
+                        break;
                     }
                 }
             }
@@ -62,6 +67,6 @@ public sealed class BinaryReplacer(Stream stream, int bufferSize = ushort.MaxVal
             }
             stream.Seek(position, SeekOrigin.Begin);
         }
-        return -1;
+        return foundPosition;
     }
 }
